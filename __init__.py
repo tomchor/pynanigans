@@ -11,22 +11,42 @@ def get_coords(ds, topology="PPN",):
     return coords
 
 
-def get_metrics(ds):
+def get_distances(ds, dim="x", topology="P"):
+    """
+    Get distance metrics for Center and Face points of one specific dimension ξ.
+    If the topology of this dimension is periodic, len(ξC)==len(ξF), but if it
+    is nonperiodic, then len(ξC)+1==len(ξF).
+
+    Currently does not deal with stretched domains where ΔξC!=ΔξF in the interior.
+    """
+    import numpy as np
+    import xarray as xr
+
+    Δξ_mean = ds[dim+"C"].diff(dim+"C").mean().item()
+    ΔξC = xr.DataArray(np.ones(len(ds[dim+"C"])), dims=[dim+'C'])
+    if topology=="P":
+        ΔξF = xr.DataArray(np.ones(len(ds[dim+"F"])), dims=[dim+'F'])
+    elif topology=="N":
+        interior = np.ones(len(ds[dim+"F"])-2)
+        ΔξF = xr.DataArray(np.hstack([0.5, interior, 0.5]), dims=[dim+'F'])
+    return Δξ_mean * xr.Dataset({f"Δ{dim}C" : ΔξC, f"Δ{dim}F" : ΔξF})
+
+
+def get_metrics(ds, topology="PPN"):
     """ 
     Constructs the metric dict for ds.
     (Not sure if the metrics are correct at the boundary points
     """
-    if "Δx" not in ds.variables: 
-        ds["Δx"] = ds.xC.diff('xC').mean().item()
-    if "Δy" not in ds.variables: 
-        ds["Δy"] = ds.yC.diff('yC').mean().item()
-    if "Δz" not in ds.variables: 
-        ds["Δz"] = ds.zC.diff('zC').mean().item()
+
+    for ξ, top in zip('xyz', topology):
+        ξdist = get_distances(ds, dim=ξ, topology=top)
+        ds.coords[f"Δ{ξ}C"] = ξdist[f"Δ{ξ}C"]
+        ds.coords[f"Δ{ξ}F"] = ξdist[f"Δ{ξ}F"]
 
     metrics = {
-        ('x',): ['Δx'], # X distances
-        ('y',): ['Δy'], # Y distances
-        ('z',): ['Δz'], # Z distances
+        ('x',): ['ΔxC', 'ΔxF'], # X distances
+        ('y',): ['ΔyC', 'ΔyF'], # Y distances
+        ('z',): ['ΔzC', 'ΔzF'], # Z distances
     }
 
     return metrics
@@ -39,7 +59,7 @@ def get_grid(ds, coords=None, metrics=None, topology="PPN", **kwargs):
     if coords is None:
         coords = get_coords(ds, topology=topology)
     if metrics is None:
-        metrics = get_metrics(ds)
+        metrics = get_metrics(ds, topology=topology)
     return xg.Grid(ds, coords=coords, metrics=metrics, **kwargs)
 
 
