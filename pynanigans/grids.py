@@ -23,7 +23,7 @@ def get_distances(ds, dim="x", topology="P"):
 
     Δξ_mean = ds[dim+"C"].diff(dim+"C").mean().item()
     ΔξC = xr.DataArray(np.ones(len(ds[dim+"C"])), dims=[dim+'C'])
-    if topology=="P":
+    if topology=="P" or topology=="F":
         ΔξF = xr.DataArray(np.ones(len(ds[dim+"F"])), dims=[dim+'F'])
     elif topology=="N":
         interior = np.ones(len(ds[dim+"F"])-2)

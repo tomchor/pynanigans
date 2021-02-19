@@ -30,3 +30,12 @@ def pnmean(darray, *args, surjection=surjection, **kwargs):
     return biject(darray, surjection=surjection).mean(*args, **kwargs)
 xr.DataArray.pnmean = pnmean
 
+
+def regular_indef_integrate(f, dim):
+    """
+    Computes the indefinite integral (or antiderivative) of f over the dimension f
+    when f is equaly spaced in dim.
+    """
+    Δt = f[dim].diff(dim).mean()
+    return f.cumsum(dim) * Δt
+
