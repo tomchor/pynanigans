@@ -39,3 +39,20 @@ def regular_indef_integrate(f, dim):
     Δt = f[dim].diff(dim).mean()
     return f.cumsum(dim) * Δt
 
+
+def from_timedelta_to(ds, seconds=1, label="seconds"):
+    """ 
+    Converts the time dimension (a timedelta[ns] object by default) into a np.float64
+    object while normalizing it by number of seconds `seconds`.
+    """
+    import numpy as np
+    if ds.time.dtype == '<m8[ns]': # timedelta[ns]
+        ds = ds.assign_coords(time = ds.time.astype(np.float64)/1e9/seconds) # From timedelta[ns] to seconds
+    elif ds.time.dtype == 'float64':
+        ds = ds.assign_coords(time = ds.time.astype(np.float64)/seconds) # From timedelta[ns] to seconds
+    else:
+        raise(TypeError("Unknown type for time"))
+    ds.time.attrs = dict(units=label)
+    return ds
+
+
