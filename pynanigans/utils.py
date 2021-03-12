@@ -40,7 +40,7 @@ def regular_indef_integrate(f, dim):
     return f.cumsum(dim) * Δt
 
 
-def from_timedelta_to(ds, seconds=1, label="seconds"):
+def normalize_time_by(ds, seconds=1, new_units="seconds"):
     """ 
     Converts the time dimension (a timedelta[ns] object by default) into a np.float64
     object while normalizing it by number of seconds `seconds`.
