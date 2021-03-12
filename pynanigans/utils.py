@@ -52,7 +52,7 @@ def normalize_time_by(ds, seconds=1, new_units="seconds"):
         ds = ds.assign_coords(time = ds.time.astype(np.float64)/seconds) # From timedelta[ns] to seconds
     else:
         raise(TypeError("Unknown type for time"))
-    ds.time.attrs = dict(units=label)
+    ds.time.attrs = dict(units=new_units)
     return ds
 
 

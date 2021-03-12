@@ -10,3 +10,9 @@ def pnplot(darray, surjection=surjection, **kwargs):
     """
     return biject(darray, surjection=surjection).plot(**kwargs)
 xr.DataArray.pnplot = pnplot
+
+def _imshow(darray, surjection=surjection, **kwargs):
+    """ Wrapper around DataArray.plot.imshow """
+    return biject(darray, surjection=surjection).plot.imshow(**kwargs)
+xr.DataArray.pnimshow = _imshow
+xr.DataArray.pnplot.imshow = xr.DataArray.pnimshow
