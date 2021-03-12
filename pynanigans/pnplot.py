@@ -15,4 +15,13 @@ def _imshow(darray, surjection=surjection, **kwargs):
     """ Wrapper around DataArray.plot.imshow """
     return biject(darray, surjection=surjection).plot.imshow(**kwargs)
 xr.DataArray.pnimshow = _imshow
-xr.DataArray.pnplot.imshow = xr.DataArray.pnimshow
+
+def _contour(darray, surjection=surjection, **kwargs):
+    """ Wrapper around DataArray.plot.contour """
+    return biject(darray, surjection=surjection).plot.contour(**kwargs)
+xr.DataArray.pncontour = _contour
+
+def _contourf(darray, surjection=surjection, **kwargs):
+    """ Wrapper around DataArray.plot.contourf """
+    return biject(darray, surjection=surjection).plot.contourf(**kwargs)
+xr.DataArray.pncontourf = _contourf
