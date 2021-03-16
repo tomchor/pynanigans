@@ -56,3 +56,31 @@ def normalize_time_by(ds, seconds=1, new_units="seconds"):
     return ds
 
 
+
+def downsample(ds, round_func=round, **dim_limits):
+    """
+    Downsamples `ds` based on dimensions given in dim_limits
+
+    dim_limits should be of the form:
+        dim_limits = dict(yC=1000, zF=2048)
+    """
+    for dim, dim_limit in dim_limits.items():
+        dim_length = len(ds[dim])
+        stride = int(round_func(dim_length / dim_limit))
+        down = {dim : slice(None, None, stride)}
+        ds = ds.isel(**down)
+    return ds
+
+
+
+def chunk(ds, maxsize_4d=1000**2, sample_var="u", round_func=round, **kwargs):
+    """ Chunk `ds` in time while keeping each chunk's size roughly 
+    around `maxsize_4d`. The default `maxsize_4d=1000**2` comes from
+    xarray's rule of thumb for chunking:
+    http://xarray.pydata.org/en/stable/dask.html#chunking-and-performance
+    """
+    chunk_number = ds[sample_var].size / maxsize_4d
+    chunk_size = int(round_func(len(ds[sample_var].time) / chunk_number))
+    return ds.chunk(dict(time=chunk_size))
+xr.DataArray.pnchunk = chunk
+xr.Dataset.pnchunk = chunk
