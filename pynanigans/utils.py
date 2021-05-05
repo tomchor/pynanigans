@@ -73,7 +73,7 @@ def downsample(ds, round_func=round, **dim_limits):
 
 
 
-def chunk(ds, maxsize_4d=1000**2, sample_var="u", round_func=round, **kwargs):
+def pnchunk(ds, maxsize_4d=1000**2, sample_var="u", round_func=round, **kwargs):
     """ Chunk `ds` in time while keeping each chunk's size roughly 
     around `maxsize_4d`. The default `maxsize_4d=1000**2` comes from
     xarray's rule of thumb for chunking:
@@ -82,5 +82,13 @@ def chunk(ds, maxsize_4d=1000**2, sample_var="u", round_func=round, **kwargs):
     chunk_number = ds[sample_var].size / maxsize_4d
     chunk_size = int(round_func(len(ds[sample_var].time) / chunk_number))
     return ds.chunk(dict(time=chunk_size))
-xr.DataArray.pnchunk = chunk
-xr.Dataset.pnchunk = chunk
+xr.DataArray.pnchunk = pnchunk
+xr.Dataset.pnchunk = pnchunk
+
+
+def pnsel(ds, x=slice(None), y=slice(None), z=slice(None), **kwargs):
+    allslices = dict(xC=x, xF=x, yC=y, yF=y, zC=z, zF=z)
+    slices = { key : val for key, val in allslices.items() if key in ds.dims }
+    return ds.sel(**slices, **kwargs)
+xr.DataArray.pnsel = pnsel
+xr.Dataset.pnsel = pnsel
