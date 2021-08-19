@@ -85,7 +85,8 @@ xr.Dataset.pnchunk = pnchunk
 
 funcnames_nonreduc = ["sel", "isel"]
 for funcname in funcnames_nonreduc:
-    funcdef = f'''def pn{funcname}(darray, surjection=surjection, **kwargs):
+    funcdef = f'''
+def pn{funcname}(darray, surjection=surjection, **kwargs):
     """
     Bijects darray to change the names of the dimensions before calling
     xarray's `{funcname}()` function
@@ -100,12 +101,18 @@ xr.Dataset.pn{funcname} = pn{funcname}'''
 funcnames_reduc = ["sum", "integrate", "mean", "std", "var", "max", "min", "median"]
 for funcname in funcnames_reduc:
     funcdef = f'''
-def pn{funcname}(darray, *args, surjection=surjection, **kwargs):
+def pn{funcname}(darray, dim=None, surjection=surjection, **kwargs):
     """
     Bijects darray to change the names of the dimensions before calling
     xarray's `{funcname}()` function
     """
-    return biject(darray, *args, surjection=surjection).{funcname}(*args, **kwargs)
+    if dim is None: # biject() receives a list of dims; funcname() receives iterable
+        bj_dims = ()
+    elif isinstance(dim, tuple) or isinstance(dim, list):
+        bj_dims = dim
+    else:
+        bj_dims = [dim]
+    return biject(darray, *bj_dims, surjection=surjection).{funcname}(dim, **kwargs)
 xr.DataArray.pn{funcname} = pn{funcname}
 xr.Dataset.pn{funcname} = pn{funcname}'''
     exec(funcdef)
