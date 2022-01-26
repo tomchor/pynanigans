@@ -29,8 +29,11 @@ def get_distances(ds, dim="x", topology="P"):
     if topology=="P" or topology=="F":
         ΔξF = xr.DataArray(np.ones(len(ds[dim+"F"])), dims=[dim+'F'])
     elif topology=="N":
-        interior = np.ones(len(ds[dim+"F"])-2)
-        ΔξF = xr.DataArray(np.hstack([0.5, interior, 0.5]), dims=[dim+'F'])
+        if len(ds[dim+"F"]) != 1:
+            interior = np.ones(len(ds[dim+"F"])-2)
+            ΔξF = xr.DataArray(np.hstack([0.5, interior, 0.5]), dims=[dim+'F'])
+        else: # Especial case of a slice in a non-periodic dimension
+            ΔξF = xr.DataArray([1], dims=[dim+'F'])
     return Δξ_mean * xr.Dataset({f"Δ{dim}C" : ΔξC, f"Δ{dim}F" : ΔξF})
 
 
