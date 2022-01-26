@@ -16,6 +16,11 @@ def _imshow(darray, surjection=surjection, **kwargs):
     return biject(darray, surjection=surjection).plot.imshow(**kwargs)
 xr.DataArray.pnimshow = _imshow
 
+def _pcolormesh(darray, surjection=surjection, **kwargs):
+    """ Wrapper around DataArray.plot.pcolormesh """
+    return biject(darray, surjection=surjection).plot.pcolormesh(**kwargs)
+xr.DataArray.pnpcolormesh = _pcolormesh
+
 def _contour(darray, surjection=surjection, **kwargs):
     """ Wrapper around DataArray.plot.contour """
     return biject(darray, surjection=surjection).plot.contour(**kwargs)
