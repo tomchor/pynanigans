@@ -12,29 +12,46 @@ def get_coords(ds, topology="PPN",):
     
     return coords
 
-
 def get_distances(ds, dim="x", topology="P"):
     """
     Get distance metrics for Center and Face points of one specific dimension ξ.
     If the topology of this dimension is periodic, len(ξC)==len(ξF), but if it
     is nonperiodic, then len(ξC)+1==len(ξF).
 
-    Currently does not deal with stretched domains where ΔξC!=ΔξF in the interior.
+    Currently deals with stretched domains (where ΔξC!=ΔξF) in an approximated fashion.
     """
     import numpy as np
     import xarray as xr
 
-    Δξ_mean = ds[dim+"C"].diff(dim+"C").mean().item()
-    ΔξC = xr.DataArray(np.ones(len(ds[dim+"C"])), dims=[dim+'C'])
+    #++++ Useful names
+    ξF_name = dim+"F"
+    ξC_name = dim+"C"
+    #----
+
+    #++++ For distances around cell centers things are (I think always) easy
+    ΔξC_left = ds[ξF_name].diff(ξF_name).to_numpy()
+    ΔξC = xr.DataArray(ΔξC_left, dims = [ξC_name], 
+                         coords = {ξC_name : ds.coords[ξC_name].to_numpy()})
+    #----
+
+    #++++ Distances around cell faces are a bit more complicated
+    ΔξF_interior = ds[ξC_name].diff(ξC_name).to_numpy()
+    ΔξF_0 = ds[ξC_name][0] - ds[ξF_name][0]
+    ΔξF_left = xr.DataArray(np.insert(ΔξF_interior, 0, ΔξF_0))
+
     if topology=="P" or topology=="F":
-        ΔξF = xr.DataArray(np.ones(len(ds[dim+"F"])), dims=[dim+'F'])
+        ΔξF = xr.DataArray(ΔξF_left, dims = [ξF_name], 
+                           coords = {ξF_name : ds.coords[ξF_name].to_numpy()})
     elif topology=="N":
-        if len(ds[dim+"F"]) != 1:
-            interior = np.ones(len(ds[dim+"F"])-2)
-            ΔξF = xr.DataArray(np.hstack([0.5, interior, 0.5]), dims=[dim+'F'])
-        else: # Especial case of a slice in a non-periodic dimension
-            ΔξF = xr.DataArray([1], dims=[dim+'F'])
-    return Δξ_mean * xr.Dataset({f"Δ{dim}C" : ΔξC, f"Δ{dim}F" : ΔξF})
+        ΔξF_right = ds[ξF_name][-1] - ds[ξC_name][-1]
+        ΔξF_all = xr.DataArray(np.append(ΔξF_left, ΔξF_right))
+        ΔξF = xr.DataArray(ΔξF_all, dims = [ξF_name], 
+                           coords = {ξF_name : ds.coords[ξF_name].to_numpy()})
+
+    #----
+
+    return xr.Dataset({f"Δ{dim}C" : ΔξC, f"Δ{dim}F" : ΔξF})
+
 
 
 def get_metrics(ds, topology="PPN"):
