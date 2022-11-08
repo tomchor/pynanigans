@@ -1,4 +1,5 @@
 import xarray as xr
+from .grids import get_grid
 
 surjection = dict(xC='x',
                   xF='x',
@@ -117,4 +118,39 @@ xr.DataArray.pn{funcname} = pn{funcname}
 xr.Dataset.pn{funcname} = pn{funcname}'''
     exec(funcdef)
 
+
+def open_simulation(fname, 
+                    grid_kwargs=dict(),
+                    load=False,
+                    squeeze=True,
+                    verbose=False,
+                    unique=True,
+                    topology="PPN", **kwargs):
+    """
+    Opens a NetCDF file, returning an xarray.Dataset and a xgcm.Grid.
+
+    `kwargs` are passed to `xarray.open_dataset()` and `grid_kwargs` are passed to `pynanigans.get_grid()`.
+    """
+    
+    #++++ Open dataset and create grid before squeezing
+    if load:
+        ds = xr.load_dataset(fname, **kwargs)
+    else:
+        ds = xr.open_dataset(fname, **kwargs)
+    grid_ds = get_grid(ds, topology=topology, **grid_kwargs)
+    #----
+
+    #++++ Squeeze?
+    if squeeze: ds = ds.squeeze()
+    #----
+
+    #++++ Returning only unique times. Useful if simulation was restarted and there's overlap in time
+    if unique:
+        import numpy as np
+        _, index = np.unique(ds['time'], return_index=True)
+        if verbose and (len(index)!=len(ds.time)): print("Cleaning non-unique indices")
+        ds = ds.isel(time=index)
+    #----
+
+    return grid_ds, ds
 
