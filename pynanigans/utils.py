@@ -84,7 +84,7 @@ xr.DataArray.pnchunk = pnchunk
 xr.Dataset.pnchunk = pnchunk
 
 
-funcnames_nonreduc = ["sel", "isel"]
+funcnames_nonreduc = ["sel", "isel", "diff", "differentiate"]
 for funcname in funcnames_nonreduc:
     funcdef = f'''
 def pn{funcname}(darray, surjection=surjection, **kwargs):
