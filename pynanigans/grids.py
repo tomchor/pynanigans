@@ -4,8 +4,8 @@ def get_coords(ds, topology="PPN",):
     Constructs the coords dict for ds to be passed to xgcm.Grid
     Flat dimensions (F) are treated the same as Periodic ones (P)
     """
-    per = dict(left='xF', center='xC')
-    nper = dict(outer='xF', center='xC')
+    per = dict(left='xF', center='x_caa')
+    nper = dict(outer='xF', center='x_caa')
     per = { dim : dict(left=f"{dim}F", center=f"{dim}C") for dim in "xyz" }
     nper = { dim : dict(outer=f"{dim}F", center=f"{dim}C") for dim in "xyz" }
     coords = { dim : per[dim] if top in "FP" else nper[dim] for dim, top in zip("xyz", topology) }

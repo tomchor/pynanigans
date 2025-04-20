@@ -1,11 +1,11 @@
 import xarray as xr
 from .grids import get_grid
 
-surjection = dict(xC='x',
+surjection = dict(x_caa='x',
                   xF='x',
-                  yC='y',
+                  y_aca='y',
                   yF='y',
-                  zC='z',
+                  z_aac='z',
                   zF='z',
                   )
 
@@ -17,7 +17,7 @@ def biject(darray, *args, surjection=surjection):
     If `*args` is provided, only those dimensions will be renamed. If not, `x`, `y` 
     and `z` will be automatically renamed.
 
-    This makes calling functions easier as instead of calling `darray.u.plot(x='xF', y='zC')`, 
+    This makes calling functions easier as instead of calling `darray.u.plot(x='xF', y='z_aac')`, 
     you can call `darray.pnplot(x='x', y='z')`
     """
     da_dims = darray.dims
@@ -60,7 +60,7 @@ def downsample(darray, round_func=round, **dim_limits):
     Downsamples `darray` based on dimensions given in dim_limits
 
     dim_limits should be of the form:
-        dim_limits = dict(yC=1000, zF=2048)
+        dim_limits = dict(y_aca=1000, zF=2048)
     """
     for dim, dim_limit in dim_limits.items():
         dim_length = len(darray[dim])
