@@ -132,25 +132,25 @@ def open_simulation(fname,
     `kwargs` are passed to `xarray.open_dataset()` and `grid_kwargs` are passed to `pynanigans.get_grid()`.
     """
     
-    #++++ Open dataset and create grid before squeezing
+    #+++ Open dataset and create grid before squeezing
     if load:
         ds = xr.load_dataset(fname, **kwargs)
     else:
         ds = xr.open_dataset(fname, **kwargs)
     grid_ds = get_grid(ds, topology=topology, **grid_kwargs)
-    #----
+    #---
 
-    #++++ Squeeze?
+    #+++ Squeeze?
     if squeeze: ds = ds.squeeze()
-    #----
+    #---
 
-    #++++ Returning only unique times. Useful if simulation was restarted and there's overlap in time
+    #+++ Returning only unique times. Useful if simulation was restarted and there's overlap in time
     if unique:
         import numpy as np
         _, index = np.unique(ds["time"], return_index=True)
         if verbose and (len(index)!=len(ds.time)): print("Cleaning non-unique indices")
         ds = ds.isel(time=index)
-    #----
+    #---
 
     return grid_ds, ds
 
