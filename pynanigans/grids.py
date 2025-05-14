@@ -4,13 +4,13 @@ def get_coords(topology="PPN"):
     Constructs the coords dict to be passed to xgcm.Grid
     Flat dimensions (F) are treated the same as Periodic ones (P)
     """
-    x_per = dict(left='x_faa', center='x_caa')
-    y_per = dict(left='y_afa', center='y_aca')
-    z_per = dict(left='z_aaf', center='z_aac')
+    x_per = dict(left="x_faa", center="x_caa")
+    y_per = dict(left="y_afa", center="y_aca")
+    z_per = dict(left="z_aaf", center="z_aac")
 
-    x_nper = dict(outer='x_faa', center='x_caa')
-    y_nper = dict(outer='y_afa', center='y_aca')
-    z_nper = dict(outer='z_aaf', center='z_aac')
+    x_nper = dict(outer="x_faa", center="x_caa")
+    y_nper = dict(outer="y_afa", center="y_aca")
+    z_nper = dict(outer="z_aaf", center="z_aac")
 
     per  = dict(x = x_per,  y = y_per,  z = z_per)
     nper = dict(x = x_nper, y = y_nper, z = z_nper)
@@ -27,9 +27,9 @@ def get_metrics(ds, topology="PPN"):
     """
 
     metrics = {
-        ('x',): ['Δx_caa', 'Δx_faa'], # X distances
-        ('y',): ['Δy_aca', 'Δy_afa'], # Y distances
-        ('z',): ['Δz_aac', 'Δz_aaf'], # Z distances
+        ("x",): ["Δx_caa", "Δx_faa"], # X distances
+        ("y",): ["Δy_aca", "Δy_afa"], # Y distances
+        ("z",): ["Δz_aac", "Δz_aaf"], # Z distances
     }
 
     return metrics

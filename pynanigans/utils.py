@@ -1,12 +1,12 @@
 import xarray as xr
 from .grids import get_grid
 
-surjection = dict(x_caa='x',
-                  x_faa='x',
-                  y_aca='y',
-                  y_afa='y',
-                  z_aac='z',
-                  z_aaf='z',
+surjection = dict(x_caa="x",
+                  x_faa="x",
+                  y_aca="y",
+                  y_afa="y",
+                  z_aac="z",
+                  z_aaf="z",
                   )
 
 
@@ -44,9 +44,9 @@ def normalize_time_by(darray, seconds=1, new_units="seconds"):
     object while normalizing it by number of seconds `seconds`.
     """
     import numpy as np
-    if darray.time.dtype == '<m8[ns]': # timedelta[ns]
+    if darray.time.dtype == "<m8[ns]": # timedelta[ns]
         darray = darray.assign_coords(time = darray.time.astype(np.float64)/1e9/seconds) # From timedelta[ns] to seconds
-    elif darray.time.dtype == 'float64':
+    elif darray.time.dtype == "float64":
         darray = darray.assign_coords(time = darray.time.astype(np.float64)/seconds) # From timedelta[ns] to seconds
     else:
         raise(TypeError("Unknown type for time"))
@@ -147,7 +147,7 @@ def open_simulation(fname,
     #++++ Returning only unique times. Useful if simulation was restarted and there's overlap in time
     if unique:
         import numpy as np
-        _, index = np.unique(ds['time'], return_index=True)
+        _, index = np.unique(ds["time"], return_index=True)
         if verbose and (len(index)!=len(ds.time)): print("Cleaning non-unique indices")
         ds = ds.isel(time=index)
     #----
