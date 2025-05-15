@@ -11,8 +11,8 @@ setup(
         "matplotlib",
     ],
     python_requires=">=3.9",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Tomas Chor",
+    author_email="contact@tomaschor.xyz",
     description="A Python package for working with Oceananigans data",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
@@ -21,6 +21,6 @@ setup(
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python",
     ],
 )
