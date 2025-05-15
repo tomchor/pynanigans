@@ -1,8 +1,14 @@
 from setuptools import setup, find_packages
+import tomli
+
+# Read version from pyproject.toml
+with open("pyproject.toml", "rb") as f:
+    pyproject = tomli.load(f)
+    version = pyproject["project"]["version"]
 
 setup(
     name="pynanigans",
-    version="0.1.0",
+    version=version,
     packages=find_packages(),
     install_requires=[
         "numpy",
