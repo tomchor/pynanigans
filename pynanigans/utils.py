@@ -77,7 +77,9 @@ def pnchunk(darray, maxsize_4d=1000**2, sample_var="u", round_func=round, **kwar
     xarray's rule of thumb for chunking:
     http://xarray.pydata.org/en/stable/dask.html#chunking-and-performance
     """
-    chunk_number = darray[sample_var].size / maxsize_4d
+    if type(ds) == xr.Dataset:
+        darray = darray[sample_var]
+    chunk_number = darray.size / maxsize_4d
     chunk_size = int(round_func(len(darray[sample_var].time) / chunk_number))
     return darray.chunk(dict(time=chunk_size))
 xr.DataArray.pnchunk = pnchunk
