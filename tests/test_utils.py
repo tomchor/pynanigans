@@ -6,11 +6,11 @@ from pynanigans.utils import biject, normalize_time_by, downsample, pnchunk
 def test_biject():
     # Create a test dataset
     data = np.random.rand(10, 10, 10)
-    dims = ['xC', 'yC', 'zC']
+    dims = ['x_caa', 'y_aca', 'z_aac']
     coords = {
-        'xC': np.linspace(0, 1, 10),
-        'yC': np.linspace(0, 1, 10),
-        'zC': np.linspace(0, 1, 10)
+        'x_caa': np.linspace(0, 1, 10),
+        'y_aca': np.linspace(0, 1, 10),
+        'z_aac': np.linspace(0, 1, 10)
     }
     ds = xr.Dataset(
         data_vars={'u': (dims, data)},
@@ -22,9 +22,9 @@ def test_biject():
     assert 'x' in result.dims
     assert 'y' in result.dims
     assert 'z' in result.dims
-    assert 'xC' not in result.dims
-    assert 'yC' not in result.dims
-    assert 'zC' not in result.dims
+    assert 'x_caa' not in result.dims
+    assert 'y_aca' not in result.dims
+    assert 'z_aac' not in result.dims
 
 def test_normalize_time_by():
     # Create a test dataset with time
@@ -43,10 +43,10 @@ def test_normalize_time_by():
 def test_downsample():
     # Create a test dataset
     data = np.random.rand(100, 100)
-    dims = ['xC', 'yC']
+    dims = ['x_caa', 'y_aca']
     coords = {
-        'xC': np.linspace(0, 1, 100),
-        'yC': np.linspace(0, 1, 100)
+        'x_caa': np.linspace(0, 1, 100),
+        'y_aca': np.linspace(0, 1, 100)
     }
     ds = xr.Dataset(
         data_vars={'u': (dims, data)},
@@ -54,20 +54,20 @@ def test_downsample():
     )
 
     # Test downsampling
-    result = downsample(ds.u, xC=50, yC=50)
-    assert len(result.xC) == 50
-    assert len(result.yC) == 50
+    result = downsample(ds.u, x_caa=50, y_aca=50)
+    assert len(result.x_caa) == 50
+    assert len(result.y_aca) == 50
 
 def test_pnchunk():
     # Create a test dataset with time
     data = np.random.rand(100, 10, 10, 10)
     time = np.array([np.timedelta64(i, 'ns') for i in range(100)])
-    dims = ['time', 'xC', 'yC', 'zC']
+    dims = ['time', 'x_caa', 'y_aca', 'z_aac']
     coords = {
         'time': time,
-        'xC': np.linspace(0, 1, 10),
-        'yC': np.linspace(0, 1, 10),
-        'zC': np.linspace(0, 1, 10)
+        'x_caa': np.linspace(0, 1, 10),
+        'y_aca': np.linspace(0, 1, 10),
+        'z_aac': np.linspace(0, 1, 10)
     }
     ds = xr.Dataset(
         data_vars={'u': (dims, data)},
