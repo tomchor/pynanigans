@@ -1,12 +1,12 @@
 import xarray as xr
 from .grids import get_grid
 
-surjection = dict(xC='x',
-                  xF='x',
-                  yC='y',
-                  yF='y',
-                  zC='z',
-                  zF='z',
+surjection = dict(x_caa="x",
+                  x_faa="x",
+                  y_aca="y",
+                  y_afa="y",
+                  z_aac="z",
+                  z_aaf="z",
                   )
 
 
@@ -17,7 +17,7 @@ def biject(darray, *args, surjection=surjection):
     If `*args` is provided, only those dimensions will be renamed. If not, `x`, `y`
     and `z` will be automatically renamed.
 
-    This makes calling functions easier as instead of calling `darray.u.plot(x='xF', y='zC')`,
+    This makes calling functions easier as instead of calling `darray.u.plot(x='x_faa', y='z_aac')`,
     you can call `darray.pnplot(x='x', y='z')`
     """
     da_dims = darray.dims
@@ -44,9 +44,9 @@ def normalize_time_by(darray, seconds=1, new_units="seconds"):
     object while normalizing it by number of seconds `seconds`.
     """
     import numpy as np
-    if darray.time.dtype == '<m8[ns]': # timedelta[ns]
+    if darray.time.dtype == "<m8[ns]": # timedelta[ns]
         darray = darray.assign_coords(time = darray.time.astype(np.float64)/1e9/seconds) # From timedelta[ns] to seconds
-    elif darray.time.dtype == 'float64':
+    elif darray.time.dtype == "float64":
         darray = darray.assign_coords(time = darray.time.astype(np.float64)/seconds) # From timedelta[ns] to seconds
     else:
         raise(TypeError("Unknown type for time"))
@@ -60,7 +60,7 @@ def downsample(darray, round_func=round, **dim_limits):
     Downsamples `darray` based on dimensions given in dim_limits
 
     dim_limits should be of the form:
-        dim_limits = dict(yC=1000, zF=2048)
+        dim_limits = dict(y_aca=1000, z_aaf=2048)
     """
     for dim, dim_limit in dim_limits.items():
         dim_length = len(darray[dim])
@@ -134,25 +134,25 @@ def open_simulation(fname,
     `kwargs` are passed to `xarray.open_dataset()` and `grid_kwargs` are passed to `pynanigans.get_grid()`.
     """
 
-    #++++ Open dataset and create grid before squeezing
+    #+++ Open dataset and create grid before squeezing
     if load:
         ds = xr.load_dataset(fname, **kwargs)
     else:
         ds = xr.open_dataset(fname, **kwargs)
     grid_ds = get_grid(ds, topology=topology, **grid_kwargs)
-    #----
+    #---
 
-    #++++ Squeeze?
+    #+++ Squeeze?
     if squeeze: ds = ds.squeeze()
-    #----
+    #---
 
-    #++++ Returning only unique times. Useful if simulation was restarted and there's overlap in time
+    #+++ Returning only unique times. Useful if simulation was restarted and there's overlap in time
     if unique:
         import numpy as np
-        _, index = np.unique(ds['time'], return_index=True)
+        _, index = np.unique(ds["time"], return_index=True)
         if verbose and (len(index)!=len(ds.time)): print("Cleaning non-unique indices")
         ds = ds.isel(time=index)
-    #----
+    #---
 
     return grid_ds, ds
 

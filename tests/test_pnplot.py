@@ -1,15 +1,15 @@
 import pytest
 import xarray as xr
 import numpy as np
-from pynanigans.pnplot import pnplot, _imshow, _pcolormesh, _contour, _contourf
+from pynanigans import pnplot
 
 def test_pnplot():
     # Create a test dataset
     data = np.random.rand(10, 10)
-    dims = ['xC', 'yC']
+    dims = ['x_caa', 'y_aca']
     coords = {
-        'xC': np.linspace(0, 1, 10),
-        'yC': np.linspace(0, 1, 10)
+        'x_caa': np.linspace(0, 1, 10),
+        'y_aca': np.linspace(0, 1, 10)
     }
     ds = xr.Dataset(
         data_vars={'u': (dims, data)},
@@ -17,16 +17,20 @@ def test_pnplot():
     )
 
     # Test plotting
-    plot = pnplot(ds.u, x='x', y='y')
+    plot = ds.u.pnplot(x='x', y='y')
     assert plot is not None
+
+    # Test error case - invalid dimension
+    with pytest.raises(ValueError):
+        ds.u.pnplot(x='invalid_dim', y='y')
 
 def test_imshow():
     # Create a test dataset
     data = np.random.rand(10, 10)
-    dims = ['xC', 'yC']
+    dims = ['x_caa', 'y_aca']
     coords = {
-        'xC': np.linspace(0, 1, 10),
-        'yC': np.linspace(0, 1, 10)
+        'x_caa': np.linspace(0, 1, 10),
+        'y_aca': np.linspace(0, 1, 10)
     }
     ds = xr.Dataset(
         data_vars={'u': (dims, data)},
@@ -34,16 +38,20 @@ def test_imshow():
     )
 
     # Test imshow
-    plot = _imshow(ds.u, x='x', y='y')
+    plot = ds.u.pnimshow(x='x', y='y')
     assert plot is not None
+
+    # Test error case - invalid dimension
+    with pytest.raises(ValueError):
+        ds.u.pnimshow(x='invalid_dim', y='y_aca')
 
 def test_pcolormesh():
     # Create a test dataset
     data = np.random.rand(10, 10)
-    dims = ['xC', 'yC']
+    dims = ['x_caa', 'y_aca']
     coords = {
-        'xC': np.linspace(0, 1, 10),
-        'yC': np.linspace(0, 1, 10)
+        'x_caa': np.linspace(0, 1, 10),
+        'y_aca': np.linspace(0, 1, 10)
     }
     ds = xr.Dataset(
         data_vars={'u': (dims, data)},
@@ -51,16 +59,20 @@ def test_pcolormesh():
     )
 
     # Test pcolormesh
-    plot = _pcolormesh(ds.u, x='x', y='y')
+    plot = ds.u.pnpcolormesh(x='x', y='y')
     assert plot is not None
+
+    # Test error case - invalid dimension
+    with pytest.raises(ValueError):
+        ds.u.pnpcolormesh(x='invalid_dim', y='y')
 
 def test_contour():
     # Create a test dataset
     data = np.random.rand(10, 10)
-    dims = ['xC', 'yC']
+    dims = ['x_caa', 'y_aca']
     coords = {
-        'xC': np.linspace(0, 1, 10),
-        'yC': np.linspace(0, 1, 10)
+        'x_caa': np.linspace(0, 1, 10),
+        'y_aca': np.linspace(0, 1, 10)
     }
     ds = xr.Dataset(
         data_vars={'u': (dims, data)},
@@ -68,16 +80,20 @@ def test_contour():
     )
 
     # Test contour
-    plot = _contour(ds.u, x='x', y='y')
+    plot = ds.u.pncontour(x='x', y='y')
     assert plot is not None
+
+    # Test error case - invalid dimension
+    with pytest.raises(ValueError):
+        ds.u.pncontour(x='invalid_dim', y='y')
 
 def test_contourf():
     # Create a test dataset
     data = np.random.rand(10, 10)
-    dims = ['xC', 'yC']
+    dims = ['x_caa', 'y_aca']
     coords = {
-        'xC': np.linspace(0, 1, 10),
-        'yC': np.linspace(0, 1, 10)
+        'x_caa': np.linspace(0, 1, 10),
+        'y_aca': np.linspace(0, 1, 10)
     }
     ds = xr.Dataset(
         data_vars={'u': (dims, data)},
@@ -85,5 +101,9 @@ def test_contourf():
     )
 
     # Test contourf
-    plot = _contourf(ds.u, x='x', y='y')
+    plot = ds.u.pncontourf(x='x', y='y')
     assert plot is not None
+
+    # Test error case - invalid dimension
+    with pytest.raises(ValueError):
+        ds.u.pncontourf(x='invalid_dim', y='y')
