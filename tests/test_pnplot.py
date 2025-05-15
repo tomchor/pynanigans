@@ -17,12 +17,12 @@ def test_pnplot():
     )
 
     # Test plotting
-    plot = pnplot(ds.u, x='x_caa', y='y_aca')
+    plot = ds.u.pnplot(x='x', y='y')
     assert plot is not None
 
     # Test error case - invalid dimension
     with pytest.raises(ValueError):
-        pnplot(ds.u, x='invalid_dim', y='y_aca')
+        ds.u.pnplot(x='invalid_dim', y='y')
 
 def test_imshow():
     # Create a test dataset
@@ -38,7 +38,7 @@ def test_imshow():
     )
 
     # Test imshow
-    plot = ds.u.pnimshow(x='x_caa', y='y_aca')
+    plot = ds.u.pnimshow(x='x', y='y')
     assert plot is not None
 
     # Test error case - invalid dimension
@@ -59,12 +59,12 @@ def test_pcolormesh():
     )
 
     # Test pcolormesh
-    plot = ds.u.pnpcolormesh(x='x_caa', y='y_aca')
+    plot = ds.u.pnpcolormesh(x='x', y='y')
     assert plot is not None
 
     # Test error case - invalid dimension
     with pytest.raises(ValueError):
-        ds.u.pnpcolormesh(x='invalid_dim', y='y_aca')
+        ds.u.pnpcolormesh(x='invalid_dim', y='y')
 
 def test_contour():
     # Create a test dataset
@@ -80,12 +80,12 @@ def test_contour():
     )
 
     # Test contour
-    plot = ds.u.pncontour(x='x_caa', y='y_aca')
+    plot = ds.u.pncontour(x='x', y='y')
     assert plot is not None
 
     # Test error case - invalid dimension
     with pytest.raises(ValueError):
-        ds.u.pncontour(x='invalid_dim', y='y_aca')
+        ds.u.pncontour(x='invalid_dim', y='y')
 
 def test_contourf():
     # Create a test dataset
@@ -101,9 +101,9 @@ def test_contourf():
     )
 
     # Test contourf
-    plot = ds.u.pncontourf(x='x_caa', y='y_aca')
+    plot = ds.u.pncontourf(x='x', y='y')
     assert plot is not None
 
     # Test error case - invalid dimension
     with pytest.raises(ValueError):
-        ds.u.pncontourf(x='invalid_dim', y='y_aca')
+        ds.u.pncontourf(x='invalid_dim', y='y')
