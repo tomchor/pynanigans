@@ -76,4 +76,5 @@ def test_pnchunk():
 
     # Test chunking
     result = pnchunk(ds.u, maxsize_4d=1000)
-    assert 'chunks' in result.encoding
+    result = pnchunk(ds, maxsize_4d=1000)
+    assert any(result.chunks)
