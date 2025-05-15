@@ -1,6 +1,6 @@
 
 def get_coords(topology="PPN"):
-    """ 
+    """
     Constructs the coords dict to be passed to xgcm.Grid
     Flat dimensions (F) are treated the same as Periodic ones (P)
     """
