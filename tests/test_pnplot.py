@@ -15,7 +15,7 @@ def test_pnplot():
         data_vars={'u': (dims, data)},
         coords=coords
     )
-    
+
     # Test plotting
     plot = pnplot(ds.u, x='x', y='y')
     assert plot is not None
@@ -32,7 +32,7 @@ def test_imshow():
         data_vars={'u': (dims, data)},
         coords=coords
     )
-    
+
     # Test imshow
     plot = _imshow(ds.u, x='x', y='y')
     assert plot is not None
@@ -49,7 +49,7 @@ def test_pcolormesh():
         data_vars={'u': (dims, data)},
         coords=coords
     )
-    
+
     # Test pcolormesh
     plot = _pcolormesh(ds.u, x='x', y='y')
     assert plot is not None
@@ -66,7 +66,7 @@ def test_contour():
         data_vars={'u': (dims, data)},
         coords=coords
     )
-    
+
     # Test contour
     plot = _contour(ds.u, x='x', y='y')
     assert plot is not None
@@ -83,7 +83,7 @@ def test_contourf():
         data_vars={'u': (dims, data)},
         coords=coords
     )
-    
+
     # Test contourf
     plot = _contourf(ds.u, x='x', y='y')
-    assert plot is not None 
+    assert plot is not None

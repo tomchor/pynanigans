@@ -14,10 +14,10 @@ def biject(darray, *args, surjection=surjection):
     """
     Renames darray so that the dimension names actually correspond to the physical
     dimensions, instead of being the name of the grid meshes in Oceananigans.
-    If `*args` is provided, only those dimensions will be renamed. If not, `x`, `y` 
+    If `*args` is provided, only those dimensions will be renamed. If not, `x`, `y`
     and `z` will be automatically renamed.
 
-    This makes calling functions easier as instead of calling `darray.u.plot(x='xF', y='zC')`, 
+    This makes calling functions easier as instead of calling `darray.u.plot(x='xF', y='zC')`,
     you can call `darray.pnplot(x='x', y='z')`
     """
     da_dims = darray.dims
@@ -39,7 +39,7 @@ def regular_indef_integrate(f, dim):
 
 
 def normalize_time_by(darray, seconds=1, new_units="seconds"):
-    """ 
+    """
     Converts the time dimension (a timedelta[ns] object by default) into a np.float64
     object while normalizing it by number of seconds `seconds`.
     """
@@ -72,7 +72,7 @@ def downsample(darray, round_func=round, **dim_limits):
 
 
 def pnchunk(darray, maxsize_4d=1000**2, sample_var="u", round_func=round, **kwargs):
-    """ Chunk `darray` in time while keeping each chunk's size roughly 
+    """ Chunk `darray` in time while keeping each chunk's size roughly
     around `maxsize_4d`. The default `maxsize_4d=1000**2` comes from
     xarray's rule of thumb for chunking:
     http://xarray.pydata.org/en/stable/dask.html#chunking-and-performance
@@ -119,7 +119,7 @@ xr.Dataset.pn{funcname} = pn{funcname}'''
     exec(funcdef)
 
 
-def open_simulation(fname, 
+def open_simulation(fname,
                     grid_kwargs=dict(),
                     load=False,
                     squeeze=True,
@@ -131,7 +131,7 @@ def open_simulation(fname,
 
     `kwargs` are passed to `xarray.open_dataset()` and `grid_kwargs` are passed to `pynanigans.get_grid()`.
     """
-    
+
     #++++ Open dataset and create grid before squeezing
     if load:
         ds = xr.load_dataset(fname, **kwargs)

@@ -16,7 +16,7 @@ def test_biject():
         data_vars={'u': (dims, data)},
         coords=coords
     )
-    
+
     # Test bijection
     result = biject(ds.u)
     assert 'x' in result.dims
@@ -34,7 +34,7 @@ def test_normalize_time_by():
         data_vars={'u': ('time', data)},
         coords={'time': time}
     )
-    
+
     # Test normalization
     result = normalize_time_by(ds.u, seconds=1)
     assert result.time.dtype == 'float64'
@@ -52,7 +52,7 @@ def test_downsample():
         data_vars={'u': (dims, data)},
         coords=coords
     )
-    
+
     # Test downsampling
     result = downsample(ds.u, xC=50, yC=50)
     assert len(result.xC) == 50
@@ -73,7 +73,7 @@ def test_pnchunk():
         data_vars={'u': (dims, data)},
         coords=coords
     )
-    
+
     # Test chunking
     result = pnchunk(ds.u, maxsize_4d=1000)
-    assert 'chunks' in result.encoding 
+    assert 'chunks' in result.encoding

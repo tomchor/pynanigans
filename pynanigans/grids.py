@@ -1,6 +1,6 @@
 
 def get_coords(ds, topology="PPN",):
-    """ 
+    """
     Constructs the coords dict for ds to be passed to xgcm.Grid
     Flat dimensions (F) are treated the same as Periodic ones (P)
     """
@@ -9,7 +9,7 @@ def get_coords(ds, topology="PPN",):
     per = { dim : dict(left=f"{dim}F", center=f"{dim}C") for dim in "xyz" }
     nper = { dim : dict(outer=f"{dim}F", center=f"{dim}C") for dim in "xyz" }
     coords = { dim : per[dim] if top in "FP" else nper[dim] for dim, top in zip("xyz", topology) }
-    
+
     return coords
 
 
@@ -38,7 +38,7 @@ def get_distances(ds, dim="x", topology="P"):
 
 
 def get_metrics(ds, topology="PPN"):
-    """ 
+    """
     Constructs the metric dict for ds.
     (Not sure if the metrics are correct at the boundary points
     """
@@ -67,7 +67,7 @@ def get_grid(ds, coords=None, metrics=None, topology="PPN", **kwargs):
         metrics = get_metrics(ds, topology=topology)
 
     periodic = [ dim for (dim, top) in zip("xyz", topology) if top in "PF" ]
-    return xg.Grid(ds, coords=coords, metrics=metrics, 
+    return xg.Grid(ds, coords=coords, metrics=metrics,
                    periodic=periodic, **kwargs)
 
 

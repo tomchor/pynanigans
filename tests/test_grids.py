@@ -11,7 +11,7 @@ def test_get_coords():
     assert "z" in coords
     assert coords["x"]["left"] == "xF"
     assert coords["x"]["center"] == "xC"
-    
+
     # Test non-periodic coordinates
     coords = get_coords(topology="NNN")
     assert coords["x"]["outer"] == "xF"
@@ -30,7 +30,7 @@ def test_get_metrics():
         data_vars={'u': (dims, data)},
         coords=coords
     )
-    
+
     # Test metrics
     metrics = get_metrics(ds)
     assert ('x',) in metrics
@@ -52,9 +52,9 @@ def test_get_grid():
         data_vars={'u': (dims, data)},
         coords=coords
     )
-    
+
     # Test grid creation
     grid = get_grid(ds, topology="PPP")
     assert grid is not None
     assert hasattr(grid, 'coords')
-    assert hasattr(grid, 'metrics') 
+    assert hasattr(grid, 'metrics')
