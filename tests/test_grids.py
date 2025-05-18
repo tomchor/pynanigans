@@ -33,7 +33,7 @@ def test_get_metrics():
     )
     
     # Test metrics
-    metrics = get_metrics(ds)
+    metrics = get_metrics(get_coords("PPP"))
     assert ('x',) in metrics
     assert ('y',) in metrics
     assert ('z',) in metrics
