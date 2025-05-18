@@ -20,14 +20,14 @@ def get_coords(topology="PPN"):
     return coords
 
 
-def get_metrics(ds, topology="PPN"):
+def get_metrics(coords):
     """ 
-    Constructs the metric dict for `ds`.
+    Constructs the metric dict based on `coords`.
     """
     metrics = {
-        ("x",): ["Δx_caa", "Δx_faa"], # X distances
-        ("y",): ["Δy_aca", "Δy_afa"], # Y distances
-        ("z",): ["Δz_aac", "Δz_aaf"], # Z distances
+        ("x",): [ "Δ" + coords["x"][key] for key in coords["x"].keys() ], # X distances
+        ("y",): [ "Δ" + coords["y"][key] for key in coords["y"].keys() ], # Y distances
+        ("z",): [ "Δ" + coords["z"][key] for key in coords["z"].keys() ], # Y distances
     }
     return metrics
 
@@ -39,10 +39,8 @@ def get_grid(ds, coords=None, metrics=None, topology="PPN", **kwargs):
     if coords is None:
         coords = get_coords(topology)
     if metrics is None:
-        metrics = get_metrics(ds, topology=topology)
+        metrics = get_metrics(coords)
 
     periodic = [ dim for (dim, top) in zip("xyz", topology) if top in "PF" ]
     return xg.Grid(ds, coords=coords, metrics=metrics,
                    periodic=periodic, **kwargs)
-
-
