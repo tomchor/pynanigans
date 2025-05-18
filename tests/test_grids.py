@@ -45,7 +45,7 @@ def test_read_uvw_nc():
     test_data_path = "uvw.nc"
 
     # Read the netCDF file
-    grid, ds = open_simulation(test_data_path, topology="PPN")
+    grid, ds = open_simulation(test_data_path, topology="PPN", decode_times=False)
 
     # Basic dataset structure checks
     assert "u" in ds
