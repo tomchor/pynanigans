@@ -3,6 +3,7 @@ import xarray as xr
 import numpy as np
 from pynanigans.utils import open_simulation
 from pynanigans.grids import get_coords, get_metrics, get_grid
+import os
 
 def test_get_coords():
     # Test periodic coordinates
@@ -42,7 +43,7 @@ def test_get_metrics():
 
 def test_read_uvw_nc():
     # Get the path to the test data file
-    test_data_path = "uvw.nc"
+    test_data_path = os.path.join(os.path.dirname(__file__), "uvw.nc")
 
     # Read the netCDF file
     grid, ds = open_simulation(test_data_path, topology="PPN", decode_times=False)
