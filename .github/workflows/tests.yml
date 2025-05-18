@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest pytest-cov tomli
+        pip install pytest pytest-cov tomli xarray netcdf4
         pip install -e .
 
     - name: Run tests
